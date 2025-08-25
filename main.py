@@ -7,10 +7,13 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from docx import Document
+from dotenv import load_dotenv
+
 from buttons import admin_btn
 from aiogram.types import FSInputFile
 
-TOKEN = "8009314342:AAHli5bhMoIbUvgqfg5W7QHHPUpjtRVMtzE"
+load_dotenv()  # .env faylni yuklash
+TOKEN = os.getenv("BOT_TOKEN")  #
 
 # --- States ---
 class RegisterState(StatesGroup):
@@ -190,9 +193,10 @@ async def list_admins(message: Message):
     text += "\n".join([str(a) for a in admins])
     await message.answer(text)
 
-# --- Run bot ---
 async def main():
     bot = Bot(token=TOKEN)
+    # pollingdan oldin webhookni o‘chirib tashlash
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
